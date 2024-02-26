@@ -43,6 +43,9 @@ public class alike {
 	   catch (TokenMgrError e) {
 		   System.err.println("LEX_ERROR: " + e.getMessage());
 	   }
+	   catch (ParseException e) {
+			System.err.println("Parse_exception: " + e.getMessage());
+	   }
 	   //...
    }
 }
@@ -53,24 +56,30 @@ PARSER_END(alike)
 TOKEN : {
 	< #LETTER: (["a"-"z","A"-"Z"]) >
 |	< #DIGIT: ["0"-"9"] >
+|	< #UNDERSCORE: "_" >
 }
 
-TOKEN : { 
-|	< tSPACE: " " >
+SKIP : { 
+	< tSPACE: " " >
 | 	< tNL: "\n" >
 |	< tTAB: "\t" >
+|	< tENTER: "\r" >
 }
 
 TOKEN : { // Tipos
-|	< tBOOL: "bool" >
+	< tBOOL: "boolean" >
 |	< tCHAR: "char" >
-|	< tCHARACTR: "character" >
+|	< tCHARACTER: "character" >
 |   < tINTEGER: "integer" >
 |	< tNULL: "null" >
+|	< tARRAY: "array" >
+|	< tCONST_INT: (["0"-"9"])+
+|	< tCONST_CHAR: "\'"(~["\n","\t","\r","\f","\b","\'","\""] | ("\"\"") | ("\'\'"))"\'" >
+| 	< tCONST_STRING: "\""(~["\n","\t","\r","\f","\b","\'","\""] | ("\"\"") | ("\'\'"))*"\"" >
 }
 
 TOKEN : { // Operadores
-|	< tCOMMENT: "--" >
+	< tCOMMENT: "--" >
 |	< tASIGN: ":=" >
 |	< tSUM: "+" >
 |   < tRES: "-" >
@@ -79,37 +88,44 @@ TOKEN : { // Operadores
 |	< tLT: "<" >
 |	< tGE: ">=" >
 |	< tLE: "<=" >
+|	< tDIF: "/=" >
 |	< tMUL: "*" >
 |	< tMOD: "mod" >
 |	< tDIV: "/" >
+|	< tNOT: "not" >
 }
 
 TOKEN : { // Sintaxis reservada estructuras simples
-|	< tIF: "if" >
+	< tIF: "if" >
 |	< tELIF: "elsif" >
 |	< tTHEN: "then" >
 |	< tWHILE: "while" >
 |	< tLOOP: "loop" >
+|	< tTRUE: "true" >
+|	< tFALSE: "false" >
 }
 
 TOKEN : { // Sintaxis reservada funciones
-|	< tPROCEDURE: "procedure" >
+	< tPROCEDURE: "procedure" >
 |	< tIS: "is" >
 |	< tREF: "ref" >
+|	< tOF: "of" >
 |	< tBEGIN: "begin" >
 |	< tEND: "end" >
 |	< tRETURN: "return" >
 }
 
 TOKEN : { // Instrucciones E/S
-|	< tSKIP_LN: "skip_line" >
+	< tSKIP_LN: "skip_line" >
 |	< tPUT: "put" >
 |	< tPUT_LN: "put_line" >
 |	< tGET: "get" >
+|	< tCHAR2INT: "char2int" >
+|	< tINT2CHAR: "int2char" >
 }
 
 TOKEN : { // Separadores
-|	< tPUNTO: "." >
+	< tPUNTO: "." >
 |	< tCOMA:	"," >
 |	< tDOSPUNTOS: ".." >
 |	< tDOBLEPUNTO: ":" >
@@ -118,52 +134,253 @@ TOKEN : { // Separadores
 |	< tCORCHETES_CLOSE: "]" >
 |	< tPARENTESIS_OPEN: "(" >
 |	< tPARENTESIS_CLOSE: ")" >
-|	< tCOMILLA_DOBLE: "\"" >
-|	< tCOMILLA_SIMPLE: "\'" >
+|	< tID: ["a"-"z","A"-"Z","_"](["a"-"z","A"-"Z","0"-"9","_"])* >
 }
 
 
 //------------ Símbolo inicial de la gramática. Para análisis léxico no hace falta más
-void Programa() : 
+/*void Programa() : 
 {
-	Token t;
+	//Token t;
 }
 {
    ( 
-	   < tBEGIN > | < tSPACE > | < tNL > | < tTAB > | 
-	   < tBOOL > | < tCHAR > | < tCHARACTR > | < tINTEGER > | < tNULL > |
-	   < tCOMMENT > | < tASIGN > | < tSUM > | < tRES > | < tEQU > | < tGT > | < tLT > | < tGE > | < tLE > | < tMUL > | < tMOD > | < tDIV > |
-	   < tIF > | < tELIF > |	< tTHEN > |	< tWHILE > | < tLOOP > |
-	   < tPROCEDURE > | < tIS > | < tREF > | < tBEGIN > | < tEND > | < tRETURN >
-	   < tSKIP_LN > | < tPUT > | < tPUT_LN > | < tGET > |
-	   < tPUNTO > |	< tCOMA > |	< tDOSPUNTOS > | < tDOBLEPUNTO > | < tPUNTOCOMA > |	< tCORCHETES_OPEN > | < tCORCHETES_CLOSE > | < tPARENTESIS_OPEN > |	< tPARENTESIS_CLOSE > |	< tCOMILLA_DOBLE > | < tCOMILLA_SIMPLE >
+	   < tBEGIN > { System.out.println("begin");}
+	   | 
+	   < tBOOL > | < tCHAR > | < tCHARACTER > | < tINTEGER > | < tNULL > | < tARRAY > | < tCONST_INT > | < tCONST_CHAR > {System.out.println("char");} | < tCONST_STRING > {System.out.println("string");} 
+	   |
+	   < tCOMMENT > | < tASIGN > | < tSUM > | < tRES > | < tEQU > | < tGT > | < tLT > | < tGE > | < tLE > | < tMUL > | < tMOD > | < tDIV > | < tNOT > | < tDIF >
+	   |
+	   < tIF > | < tELIF > |	< tTHEN > |	< tWHILE > | < tLOOP > | < tTRUE > | < tFALSE > 
+	   |
+	   < tPROCEDURE > | < tIS > | < tREF > | < tEND > | < tRETURN > | < tOF > 
+	   |
+	   < tSKIP_LN > | < tPUT > | < tPUT_LN > | < tGET > | <tCHAR2INT> | <tINT2CHAR> 
+	   |
+	   < tPUNTO > |	< tCOMA > |	< tDOSPUNTOS > | < tDOBLEPUNTO > | < tPUNTOCOMA > |	< tCORCHETES_OPEN > | < tCORCHETES_CLOSE > | < tPARENTESIS_OPEN > |	< tPARENTESIS_CLOSE > | < tID >
    )+
    < EOF >
+}*/
+
+void Programa() : 
+{
+
+}
+{
+	<tPROCEDURE>
+	<tID>
+	<tIS>
+	( declaracion_variables() )?
+	( declaracion_procs_funcs() )?
+	<tBEGIN>
+	( instrucciones() ) // Programa debe tener obligatoriamente instrucciones?
+	<tEND>
+	<tPUNTOCOMA>
+	<EOF>
+}
+	
+
+void lista_ids():
+{
+
+}
+{
+	(<tID> <tCOMA>)* (<tID>)
 }
 
-/*
- * 
- * //MAIN UNIT
-void fichero(InfoFich info) : 
+void declaracion_variables() :
 {
-	Token t;
+
 }
 {
-	( 
-		t = < tPALABRA >
-		{
-			info.nPal++;
-			info.nChar += t.endColumn - t.beginColumn + 1;
-		}
-	|	t = < tNL >
-		{
-			info.nLin++;
-			info.nChar++;
-		}
-	|	t = < tTAB >
-		{
-			info.nChar++;
-		}
-	)+
+	( declaracion_var() )+
 }
- */
+
+		
+void tipo_variable() :
+{
+
+}
+{
+	<tBOOL> | <tCHAR> | <tCHARACTER> | <tINTEGER> 
+	
+}
+
+void rango() :
+{
+
+}
+{
+	<tCONST_INT> <tDOSPUNTOS> <tCONST_INT>
+}
+
+void estructura_array():
+{
+
+}
+{
+	<tARRAY> <tPARENTESIS_OPEN> rango() <tPARENTESIS_CLOSE> <tOF> tipo_variable()
+}
+
+void declaracion_var():
+{
+	
+}
+{
+	lista_ids() 
+	<tDOBLEPUNTO>
+	(<tREF>)?
+	( tipo_variable() | estructura_array())
+}
+
+void lista_parametros_funcion():
+{
+
+}
+{
+	(declaracion_var() <tPUNTOCOMA>)* declaracion_var()
+	
+}
+	
+void parametros_formales():
+{
+
+}
+{
+	<tPARENTESIS_OPEN>
+	lista_parametros_funcion()
+	<tPARENTESIS_CLOSE>
+}
+
+void cabecera_procedimiento() :
+{
+	
+}
+{
+	<tPROCEDURE>
+	<tID>
+	( parametros_formales() )?
+	<tIS>
+}
+	
+
+...
+
+void instruccion() : //FALTAN TODAS
+{
+
+}
+{
+	( inst_leer() )
+|   ( inst_saltar_linea() )
+|	( inst_escribir() )
+|   ( inst_escribir_linea() )
+|   ( inst_invocacion_o_asignacion() )
+|   ( inst_if() )
+|   ( inst_while() )
+|   ( inst_return() )
+|   ( inst_null() )
+}
+	
+void instrucciones() :
+{
+
+}
+{
+	(instruccion())+
+}
+
+void expresion() :
+{
+	
+}
+{
+	relacion()
+	( ((<tAND> | <tOR>) relacion())+ )?
+}
+	
+void lista_una_o_mas_exps():
+{
+
+}
+{
+	(expresion() <tCOMA>)* (expresion())
+	
+}
+
+void relacion() :
+{
+	
+}
+{
+	expresion_simple()
+	( operador_relacional() expresion_simple() )?
+}
+	
+	
+
+void operador_relacional() :
+{
+
+}
+{
+	<tEQU> | <tLT> | <tGT> | <tLE> | <tGE> | <tDIF>
+}
+	
+
+void expresion_simple() :
+{
+
+}
+{
+	( <tSUM> |	<tRES> )? 
+	termino()
+	( ( <tSUM> | tRES> ) termino() )*
+}
+	
+
+void termino() :
+{
+
+}
+{
+	factor() ( operador_multiplicativo() factor() )*
+}
+	
+
+void operador_multiplicativo() :
+{
+
+}
+{
+	<tMUL> | <tMOD> | <tDIV>
+}
+	
+
+void factor() :
+{
+
+}
+{
+	primario()
+|   <tNOT>  primario()
+}
+	
+
+void primario() :
+{
+
+}
+{
+	<tPARENTESIS_OPEN> expresion() <tPARENTESIS_CLOSE>
+|	<tINT2CHAR> <tPARENTESIS_OPEN> expresion() <tPARENTESIS_CLOSE>
+|	<tCHAR2INT> <tPARENTESIS_OPEN> expresion() <tPARENTESIS_CLOSE>
+|	LOOKAHEAD(2)
+	<tID> <tPARENTESIS_OPEN> lista_una_o_mas_exps() <tPARENTESIS_CLOSE> //invoc. func. o comp. array
+|	<tID>              //var. o func. sin pars
+|	<tCONST_INT>
+|	<tCONST_CHAR>
+|	<tCONST_STRING> //rn sf.primario_8(t);
+|	<tTRUE>
+|	<tFALSE>
+}
