@@ -98,6 +98,7 @@ TOKEN : { // Operadores
 TOKEN : { // Sintaxis reservada estructuras simples
 	< tIF: "if" >
 |	< tELIF: "elsif" >
+|	< tELSE: "else" >
 |	< tTHEN: "then" >
 |	< tWHILE: "while" >
 |	< tLOOP: "loop" >
@@ -107,6 +108,7 @@ TOKEN : { // Sintaxis reservada estructuras simples
 
 TOKEN : { // Sintaxis reservada funciones
 	< tPROCEDURE: "procedure" >
+|	< tFUNCTION: "function" >
 |	< tIS: "is" >
 |	< tREF: "ref" >
 |	< tOF: "of" >
@@ -151,9 +153,9 @@ TOKEN : { // Separadores
 	   |
 	   < tCOMMENT > | < tASIGN > | < tSUM > | < tRES > | < tEQU > | < tGT > | < tLT > | < tGE > | < tLE > | < tMUL > | < tMOD > | < tDIV > | < tNOT > | < tDIF >
 	   |
-	   < tIF > | < tELIF > |	< tTHEN > |	< tWHILE > | < tLOOP > | < tTRUE > | < tFALSE > 
+	   < tIF > | < tELIF > |	< tTHEN > |	< tWHILE > | < tLOOP > | < tTRUE > | < tFALSE > | <tELSE>
 	   |
-	   < tPROCEDURE > | < tIS > | < tREF > | < tEND > | < tRETURN > | < tOF > 
+	   < tPROCEDURE > | < tIS > | < tREF > | < tEND > | < tRETURN > | < tOF > | <tFUNCTION>
 	   |
 	   < tSKIP_LN > | < tPUT > | < tPUT_LN > | < tGET > | <tCHAR2INT> | <tINT2CHAR> 
 	   |
@@ -173,7 +175,7 @@ void Programa() :
 	( declaracion_variables() )?
 	( declaracion_procs_funcs() )?
 	<tBEGIN>
-	( instrucciones() ) // Programa debe tener obligatoriamente instrucciones?
+	instrucciones()
 	<tEND>
 	<tPUNTOCOMA>
 	<EOF>
@@ -263,10 +265,103 @@ void cabecera_procedimiento() :
 	<tIS>
 }
 	
+void llamada_funcion():
+{
+
+}
+{
+	<tID> <tPARENTESIS_OPEN> lista_ids() <tPARENTESIS_CLOSE>
+}
 
 ...
 
-void instruccion() : //FALTAN TODAS
+void inst_leer():
+{
+
+}
+{
+	<tGET> <tPARENTESIS_OPEN> lista_ids() <tPARENTESIS_CLOSE>
+}
+
+void inst_saltar_linea():
+{
+
+}
+{
+	<tSKIP_LN>
+}
+
+void inst_escribir(): //HE PUESTO QUE PUEDAS ESCRIBIR EL RESULTADO DE CUALQUIER FUNCION PERO IGUAL ES SOLO EL DE INT2CHAR(K)
+{
+
+}
+{
+	<tPUT> <tPARENTESIS_OPEN> 
+	((<tCONST_STRING> | <tCONST_CHAR> | lista_ids() | llamada_funcion()) <tCOMA>)* (<tCONST_STRING> | <tCONST_CHAR> | lista_ids())
+	<tPARENTESIS_CLOSE>
+}
+
+void inst_escribir_linea(): //HE PUESTO QUE PUEDAS ESCRIBIR EL RESULTADO DE CUALQUIER FUNCION PERO IGUAL ES SOLO EL DE INT2CHAR(K)
+{
+
+}
+{
+	<tPUT_LN> <tPARENTESIS_OPEN> 
+	((<tCONST_STRING> | <tCONST_CHAR> | lista_ids() | llamada_funcion()) <tCOMA>)* (<tCONST_STRING> | <tCONST_CHAR> | lista_ids())
+	<tPARENTESIS_CLOSE>
+}
+
+void inst_invocacion_o_asignacion(): //NO SE MUY BIEN QUE SIGNIFICA ESTO PERO HE PUESTO O UNA INVOCACION DE UNA FUNCION O UNA ASIGNACION
+{
+
+}
+{
+	llamada_funcion()
+|	<tID> <tASIGN> (<tCONST_CHAR> | <tCONST_INT> | <tCONST_STRING>)
+
+}
+
+void inst_if():
+{
+
+}
+{
+	<tIF> (expresion() <tTHEN>
+	instrucciones()
+	<tELIF> )* expresion() <tTHEN>
+	instrucciones()
+	(<tELSE> instrucciones())?
+	<tEND> <tIF>
+	
+}
+
+void inst_while():
+{
+
+}
+{
+	<tWHILE> expresion() <tLOOP> 
+	instrucciones() 
+	<tEND> <tLOOP>
+}
+
+void inst_return():
+{
+
+}
+{
+	<tRETURN> (<tID> | <tCONST_CHAR> | <tCONST_INT> | <tCONST_STRING>)
+}
+
+void inst_null():
+{
+
+}
+{
+	<tNULL>
+}
+
+void instruccion() :
 {
 
 }
@@ -287,7 +382,7 @@ void instrucciones() :
 
 }
 {
-	(instruccion())+
+	(instruccion() <tPUNTOCOMA>)+
 }
 
 void expresion() :
