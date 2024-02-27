@@ -29,7 +29,7 @@ public interface alikeConstants {
   /** RegularExpression Id. */
   int tCHAR = 9;
   /** RegularExpression Id. */
-  int tCHARACTR = 10;
+  int tCHARACTER = 10;
   /** RegularExpression Id. */
   int tINTEGER = 11;
   /** RegularExpression Id. */
@@ -37,91 +37,107 @@ public interface alikeConstants {
   /** RegularExpression Id. */
   int tARRAY = 13;
   /** RegularExpression Id. */
-  int tCONST_CHAR = 14;
+  int tCONST_INT = 14;
   /** RegularExpression Id. */
-  int tCONST_STRING = 15;
+  int tCONST_CHAR = 15;
   /** RegularExpression Id. */
-  int tCOMMENT = 16;
+  int tCONST_STRING = 16;
   /** RegularExpression Id. */
-  int tASIGN = 17;
+  int tCOMMENT = 17;
   /** RegularExpression Id. */
-  int tSUM = 18;
+  int tASIGN = 18;
   /** RegularExpression Id. */
-  int tRES = 19;
+  int tSUM = 19;
   /** RegularExpression Id. */
-  int tEQU = 20;
+  int tRES = 20;
   /** RegularExpression Id. */
-  int tGT = 21;
+  int tEQU = 21;
   /** RegularExpression Id. */
-  int tLT = 22;
+  int tGT = 22;
   /** RegularExpression Id. */
-  int tGE = 23;
+  int tLT = 23;
   /** RegularExpression Id. */
-  int tLE = 24;
+  int tGE = 24;
   /** RegularExpression Id. */
-  int tMUL = 25;
+  int tLE = 25;
   /** RegularExpression Id. */
-  int tMOD = 26;
+  int tDIF = 26;
   /** RegularExpression Id. */
-  int tDIV = 27;
+  int tMUL = 27;
   /** RegularExpression Id. */
-  int tNOT = 28;
+  int tMOD = 28;
   /** RegularExpression Id. */
-  int tIF = 29;
+  int tDIV = 29;
   /** RegularExpression Id. */
-  int tELIF = 30;
+  int tNOT = 30;
   /** RegularExpression Id. */
-  int tTHEN = 31;
+  int tAND = 31;
   /** RegularExpression Id. */
-  int tWHILE = 32;
+  int tOR = 32;
   /** RegularExpression Id. */
-  int tLOOP = 33;
+  int tIF = 33;
   /** RegularExpression Id. */
-  int tPROCEDURE = 34;
+  int tELIF = 34;
   /** RegularExpression Id. */
-  int tIS = 35;
+  int tELSE = 35;
   /** RegularExpression Id. */
-  int tREF = 36;
+  int tTHEN = 36;
   /** RegularExpression Id. */
-  int tOF = 37;
+  int tWHILE = 37;
   /** RegularExpression Id. */
-  int tBEGIN = 38;
+  int tLOOP = 38;
   /** RegularExpression Id. */
-  int tEND = 39;
+  int tTRUE = 39;
   /** RegularExpression Id. */
-  int tRETURN = 40;
+  int tFALSE = 40;
   /** RegularExpression Id. */
-  int tSKIP_LN = 41;
+  int tPROCEDURE = 41;
   /** RegularExpression Id. */
-  int tPUT = 42;
+  int tFUNCTION = 42;
   /** RegularExpression Id. */
-  int tPUT_LN = 43;
+  int tIS = 43;
   /** RegularExpression Id. */
-  int tGET = 44;
+  int tREF = 44;
   /** RegularExpression Id. */
-  int tCHAR2INT = 45;
+  int tOF = 45;
   /** RegularExpression Id. */
-  int tINT2CHAR = 46;
+  int tBEGIN = 46;
   /** RegularExpression Id. */
-  int tPUNTO = 47;
+  int tEND = 47;
   /** RegularExpression Id. */
-  int tCOMA = 48;
+  int tRETURN = 48;
   /** RegularExpression Id. */
-  int tDOSPUNTOS = 49;
+  int tSKIP_LN = 49;
   /** RegularExpression Id. */
-  int tDOBLEPUNTO = 50;
+  int tPUT = 50;
   /** RegularExpression Id. */
-  int tPUNTOCOMA = 51;
+  int tPUT_LN = 51;
   /** RegularExpression Id. */
-  int tCORCHETES_OPEN = 52;
+  int tGET = 52;
   /** RegularExpression Id. */
-  int tCORCHETES_CLOSE = 53;
+  int tCHAR2INT = 53;
   /** RegularExpression Id. */
-  int tPARENTESIS_OPEN = 54;
+  int tINT2CHAR = 54;
   /** RegularExpression Id. */
-  int tPARENTESIS_CLOSE = 55;
+  int tPUNTO = 55;
   /** RegularExpression Id. */
-  int tID = 56;
+  int tCOMA = 56;
+  /** RegularExpression Id. */
+  int tDOSPUNTOS = 57;
+  /** RegularExpression Id. */
+  int tDOBLEPUNTO = 58;
+  /** RegularExpression Id. */
+  int tPUNTOCOMA = 59;
+  /** RegularExpression Id. */
+  int tCORCHETES_OPEN = 60;
+  /** RegularExpression Id. */
+  int tCORCHETES_CLOSE = 61;
+  /** RegularExpression Id. */
+  int tPARENTESIS_OPEN = 62;
+  /** RegularExpression Id. */
+  int tPARENTESIS_CLOSE = 63;
+  /** RegularExpression Id. */
+  int tID = 64;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -142,6 +158,7 @@ public interface alikeConstants {
     "\"integer\"",
     "\"null\"",
     "\"array\"",
+    "<tCONST_INT>",
     "<tCONST_CHAR>",
     "<tCONST_STRING>",
     "\"--\"",
@@ -153,16 +170,23 @@ public interface alikeConstants {
     "\"<\"",
     "\">=\"",
     "\"<=\"",
+    "\"/=\"",
     "\"*\"",
     "\"mod\"",
     "\"/\"",
     "\"not\"",
+    "\"and\"",
+    "\"or\"",
     "\"if\"",
     "\"elsif\"",
+    "\"else\"",
     "\"then\"",
     "\"while\"",
     "\"loop\"",
+    "\"true\"",
+    "\"false\"",
     "\"procedure\"",
+    "\"function\"",
     "\"is\"",
     "\"ref\"",
     "\"of\"",

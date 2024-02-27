@@ -73,7 +73,7 @@ TOKEN : { // Tipos
 |   < tINTEGER: "integer" >
 |	< tNULL: "null" >
 |	< tARRAY: "array" >
-|	< tCONST_INT: (["0"-"9"])+
+|	< tCONST_INT: (["0"-"9"])+ >
 |	< tCONST_CHAR: "\'"(~["\n","\t","\r","\f","\b","\'","\""] | ("\"\"") | ("\'\'"))"\'" >
 | 	< tCONST_STRING: "\""(~["\n","\t","\r","\f","\b","\'","\""] | ("\"\"") | ("\'\'"))*"\"" >
 }
@@ -93,6 +93,8 @@ TOKEN : { // Operadores
 |	< tMOD: "mod" >
 |	< tDIV: "/" >
 |	< tNOT: "not" >
+|	< tAND: "and" >
+|	< tOR: "or" >
 }
 
 TOKEN : { // Sintaxis reservada estructuras simples
@@ -151,7 +153,7 @@ TOKEN : { // Separadores
 	   | 
 	   < tBOOL > | < tCHAR > | < tCHARACTER > | < tINTEGER > | < tNULL > | < tARRAY > | < tCONST_INT > | < tCONST_CHAR > {System.out.println("char");} | < tCONST_STRING > {System.out.println("string");} 
 	   |
-	   < tCOMMENT > | < tASIGN > | < tSUM > | < tRES > | < tEQU > | < tGT > | < tLT > | < tGE > | < tLE > | < tMUL > | < tMOD > | < tDIV > | < tNOT > | < tDIF >
+	   < tCOMMENT > | < tASIGN > | < tSUM > | < tRES > | < tEQU > | < tGT > | < tLT > | < tGE > | < tLE > | < tMUL > | < tMOD > | < tDIV > | < tNOT > | < tDIF > | < tAND > | < tOR >
 	   |
 	   < tIF > | < tELIF > |	< tTHEN > |	< tWHILE > | < tLOOP > | < tTRUE > | < tFALSE > | <tELSE>
 	   |
@@ -181,6 +183,48 @@ void Programa() :
 	<EOF>
 }
 	
+void declaracion_procs_funcs() :
+{
+
+}
+{
+	( declaracion_proc_func() )+
+}
+
+void declaracion_proc_func() :
+{
+
+}
+{
+	( declaracion_proc() | declaracion_func() )
+}
+
+void declaracion_func():
+{
+
+}
+{
+	cabecera_funcion()
+	( declaracion_variables() )?
+	<tBEGIN>
+	instrucciones() // instrucciones() ENGLOBA EL RETURN, PARA ESTA SI SIRVE
+	<tEND>
+	<tPUNTOCOMA>
+}
+
+void declaracion_proc():
+{
+
+}
+{
+	cabecera_procedimiento() 
+	( declaracion_variables() )?
+	<tBEGIN>
+	instrucciones() // INSTRUCCIONES ENGLOBA EL 'RETURN', QUIZAS HAY QUE DIFERENCIAR instrucciones() CON Y SIN RETURN 
+					// PARA declaracion_proc(), USAR 'RETURN' ESTARÍA DE MOMENTO MAL, SOLO SIRVE PARA declaracion_func()
+	<tEND>
+	<tPUNTOCOMA>
+}
 
 void lista_ids():
 {
@@ -264,6 +308,16 @@ void cabecera_procedimiento() :
 	( parametros_formales() )?
 	<tIS>
 }
+
+void cabecera_funcion() :
+{
+	
+}
+{
+	<tFUNCTION> <tID> 
+	( parametros_formales() )?
+	<tRETURN> tipo_variable() <tIS>
+}
 	
 void llamada_funcion():
 {
@@ -272,8 +326,6 @@ void llamada_funcion():
 {
 	<tID> <tPARENTESIS_OPEN> lista_ids() <tPARENTESIS_CLOSE>
 }
-
-...
 
 void inst_leer():
 {
@@ -430,7 +482,7 @@ void expresion_simple() :
 {
 	( <tSUM> |	<tRES> )? 
 	termino()
-	( ( <tSUM> | tRES> ) termino() )*
+	( ( <tSUM> | <tRES> ) termino() )*
 }
 	
 
