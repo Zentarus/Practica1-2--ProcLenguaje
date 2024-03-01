@@ -4,6 +4,26 @@ package traductor;
 
 /** Token Manager. */
 public class alikeTokenManager implements alikeConstants {
+        static void CommonTokenAction(Token t) {
+
+                 String[] nombresTokens = {
+                        "letra", "digito", "barra baja", "espacio", "fin de linea", "tabulador", "retorno",
+                        "boolean", "char", "character", "integer", "null", "array", "const integer", "const char", "const string",
+                        "comentario", "asignacion", "suma", "resta", "comparacion igualdad", "comparacion mayor estricto", "comparacion menor estricto",
+                        "comparacion mayor o igual", "comparacion menor o igual", "comparacion diferencia", "multiplicacion", "modulo", "division", "negacion logica",
+                        "operador logico", "operador logico", "token", "token", "token", "token", "token", "token", "constante aritmetica", "constante aritmetica",
+                        "token", "token", "token", "token", "token", "token", "token", "token", "funcion reservada", "funcion reservada", "funcion reservada",
+                        "funcion reservada", "funcion reservada", "funcion reservada", "token separador", "token separador", "token separador", "token separador",
+                        "token separador", "token separador", "token separador", "token separador", "token separador", "identificador"
+                };
+
+                int linea = t.beginLine;
+                int columna = t.beginColumn;
+                String image = t.image;
+                if (t.kind != 0){ // Si es distinto de fin de linea
+                        System.out.println("(" + linea + "," + columna + "): " + nombresTokens[t.kind-1] + " \"" + image + "\"");
+                }
+        }
 
   /** Debug output. */
   public static  java.io.PrintStream debugStream = System.out;
@@ -835,6 +855,7 @@ public static Token getNextToken()
       jjmatchedKind = 0;
       jjmatchedPos = -1;
       matchedToken = jjFillToken();
+      CommonTokenAction(matchedToken);
       return matchedToken;
    }
 
@@ -853,6 +874,7 @@ public static Token getNextToken()
       if ((jjtoToken[jjmatchedKind >> 6] & (1L << (jjmatchedKind & 077))) != 0L)
       {
          matchedToken = jjFillToken();
+         CommonTokenAction(matchedToken);
          return matchedToken;
       }
       else

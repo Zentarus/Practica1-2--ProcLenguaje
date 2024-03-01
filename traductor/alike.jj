@@ -7,7 +7,7 @@
 
 options {
 	IGNORE_CASE = true;
-	COMMON_TOKEN_ACTION = false;
+	COMMON_TOKEN_ACTION = true;
 }
 
 // ----------------------------------------------------------------------------
@@ -42,6 +42,7 @@ public class alike {
 	   }
 	   catch (TokenMgrError e) {
 		   System.err.println("LEX_ERROR: " + e.getMessage());
+
 	   }
 	   catch (ParseException e) {
 			System.err.println("Parse_exception: " + e.getMessage());
@@ -141,17 +142,40 @@ TOKEN : { // Separadores
 |	< tID: ["a"-"z","A"-"Z","_"](["a"-"z","A"-"Z","0"-"9","_"])* >
 }
 
+TOKEN_MGR_DECLS : {
+	static void CommonTokenAction(Token t) {
+
+		 String[] nombresTokens = {
+			"letra", "digito", "barra baja", "espacio", "fin de linea", "tabulador", "retorno",
+			"boolean", "char", "character", "integer", "null", "array", "const integer", "const char", "const string",
+			"comentario", "asignacion", "suma", "resta", "comparacion igualdad", "comparacion mayor estricto", "comparacion menor estricto", 
+			"comparacion mayor o igual", "comparacion menor o igual", "comparacion diferencia", "multiplicacion", "modulo", "division", "negacion logica", 
+			"operador logico", "operador logico", "token", "token", "token", "token", "token", "token", "constante aritmetica", "constante aritmetica", 
+			"token", "token", "token", "token", "token", "token", "token", "token", "funcion reservada", "funcion reservada", "funcion reservada", 
+			"funcion reservada", "funcion reservada", "funcion reservada", "token separador", "token separador", "token separador", "token separador",
+			"token separador", "token separador", "token separador", "token separador", "token separador", "identificador"
+		};
+
+		int linea = t.beginLine;
+		int columna = t.beginColumn;
+		String image = t.image;
+		if (t.kind != 0){ // Si es distinto de fin de linea
+			System.out.println("(" + linea + "," + columna + "): " + nombresTokens[t.kind-1] + " \"" + image + "\"");
+		}
+	}
+}
+
 
 //------------ Símbolo inicial de la gramática. Para análisis léxico no hace falta más
-/*void Programa() : 
+void Programa() : 
 {
 	//Token t;
 }
 {
    ( 
-	   < tBEGIN > { System.out.println("begin");}
+	   < tBEGIN >
 	   | 
-	   < tBOOL > | < tCHAR > | < tCHARACTER > | < tINTEGER > | < tNULL > | < tARRAY > | < tCONST_INT > | < tCONST_CHAR > {System.out.println("char");} | < tCONST_STRING > {System.out.println("string");} 
+	   < tBOOL > | < tCHAR > | < tCHARACTER > | < tINTEGER > | < tNULL > | < tARRAY > | < tCONST_INT > | < tCONST_CHAR > | < tCONST_STRING > 
 	   |
 	   < tCOMMENT > | < tASIGN > | < tSUM > | < tRES > | < tEQU > | < tGT > | < tLT > | < tGE > | < tLE > | < tMUL > | < tMOD > | < tDIV > | < tNOT > | < tDIF > | < tAND > | < tOR >
 	   |
@@ -164,8 +188,9 @@ TOKEN : { // Separadores
 	   < tPUNTO > |	< tCOMA > |	< tDOSPUNTOS > | < tDOBLEPUNTO > | < tPUNTOCOMA > |	< tCORCHETES_OPEN > | < tCORCHETES_CLOSE > | < tPARENTESIS_OPEN > |	< tPARENTESIS_CLOSE > | < tID >
    )+
    < EOF >
-}*/
+}
 
+/* 
 void Programa() : 
 {
 
@@ -531,3 +556,4 @@ void primario() :
 |	<tTRUE>
 |	<tFALSE>
 }
+*/
