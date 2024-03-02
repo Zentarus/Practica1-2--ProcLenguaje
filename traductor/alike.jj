@@ -167,7 +167,7 @@ TOKEN_MGR_DECLS : {
 
 
 //------------ Símbolo inicial de la gramática. Para análisis léxico no hace falta más
-void Programa() : 
+/*void Programa() : 
 {
 	//Token t;
 }
@@ -188,9 +188,9 @@ void Programa() :
 	   < tPUNTO > |	< tCOMA > |	< tDOSPUNTOS > | < tDOBLEPUNTO > | < tPUNTOCOMA > |	< tCORCHETES_OPEN > | < tCORCHETES_CLOSE > | < tPARENTESIS_OPEN > |	< tPARENTESIS_CLOSE > | < tID >
    )+
    < EOF >
-}
+}*/
 
-/* 
+
 void Programa() : 
 {
 
@@ -256,7 +256,7 @@ void lista_ids():
 
 }
 {
-	(<tID> <tCOMA>)* (<tID>)
+	((<tID> <tCOMA>)* (<tID>))*
 }
 
 void declaracion_variables() :
@@ -373,8 +373,8 @@ void inst_escribir(): //HE PUESTO QUE PUEDAS ESCRIBIR EL RESULTADO DE CUALQUIER 
 
 }
 {
-	<tPUT> <tPARENTESIS_OPEN> 
-	((<tCONST_STRING> | <tCONST_CHAR> | lista_ids() | llamada_funcion()) <tCOMA>)* (<tCONST_STRING> | <tCONST_CHAR> | lista_ids())
+	<tPUT> <tPARENTESIS_OPEN>
+	((LOOKAHEAD(<tID> <tPARENTESIS_OPEN>) llamada_funcion() | <tCONST_STRING> | <tCONST_CHAR> | lista_ids()) <tCOMA>)* (LOOKAHEAD(<tID> <tPARENTESIS_OPEN>) llamada_funcion() | <tCONST_STRING> | <tCONST_CHAR> | lista_ids())
 	<tPARENTESIS_CLOSE>
 }
 
@@ -384,7 +384,8 @@ void inst_escribir_linea(): //HE PUESTO QUE PUEDAS ESCRIBIR EL RESULTADO DE CUAL
 }
 {
 	<tPUT_LN> <tPARENTESIS_OPEN> 
-	((<tCONST_STRING> | <tCONST_CHAR> | lista_ids() | llamada_funcion()) <tCOMA>)* (<tCONST_STRING> | <tCONST_CHAR> | lista_ids())
+	//LOOKAHEAD( ( "abstract" | "final" | "public" )*)
+	((LOOKAHEAD(<tID> <tPARENTESIS_OPEN>) llamada_funcion() | <tCONST_STRING> | <tCONST_CHAR> | lista_ids()) <tCOMA>)* (LOOKAHEAD(<tID> <tPARENTESIS_OPEN>) llamada_funcion() | <tCONST_STRING> | <tCONST_CHAR> | lista_ids())
 	<tPARENTESIS_CLOSE>
 }
 
@@ -393,6 +394,7 @@ void inst_invocacion_o_asignacion(): //NO SE MUY BIEN QUE SIGNIFICA ESTO PERO HE
 
 }
 {
+	LOOKAHEAD(2)
 	llamada_funcion()
 |	<tID> <tASIGN> (<tCONST_CHAR> | <tCONST_INT> | <tCONST_STRING>)
 
@@ -556,4 +558,3 @@ void primario() :
 |	<tTRUE>
 |	<tFALSE>
 }
-*/
