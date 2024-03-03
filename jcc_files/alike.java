@@ -46,7 +46,7 @@ public class alike implements alikeConstants {
 	   | 
 	   < tBOOL > | < tCHAR > | < tCHARACTER > | < tINTEGER > | < tNULL > | < tARRAY > | < tCONST_INT > | < tCONST_CHAR > | < tCONST_STRING > 
 	   |
-	   < tCOMMENT > | < tASIGN > | < tSUM > | < tRES > | < tEQU > | < tGT > | < tLT > | < tGE > | < tLE > | < tMUL > | < tMOD > | < tDIV > | < tNOT > | < tDIF > | < tAND > | < tOR >
+	   < tASIGN > | < tSUM > | < tRES > | < tEQU > | < tGT > | < tLT > | < tGE > | < tLE > | < tMUL > | < tMOD > | < tDIV > | < tNOT > | < tDIF > | < tAND > | < tOR >
 	   |
 	   < tIF > | < tELIF > |	< tTHEN > |	< tWHILE > | < tLOOP > | < tTRUE > | < tFALSE > | <tELSE>
 	   |
@@ -65,7 +65,6 @@ void Programa() throws ParseException {
     jj_consume_token(tID);
     jj_consume_token(tIS);
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case tDOBLEPUNTO:
     case tID:{
       declaracion_variables();
       break;
@@ -128,7 +127,6 @@ void Programa() throws ParseException {
   static final public void declaracion_func() throws ParseException {
     cabecera_funcion();
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case tDOBLEPUNTO:
     case tID:{
       declaracion_variables();
       break;
@@ -146,7 +144,6 @@ void Programa() throws ParseException {
   static final public void declaracion_proc() throws ParseException {
     cabecera_procedimiento();
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case tDOBLEPUNTO:
     case tID:{
       declaracion_variables();
       break;
@@ -162,10 +159,11 @@ void Programa() throws ParseException {
 }
 
   static final public void lista_ids() throws ParseException {
+    jj_consume_token(tID);
     label_2:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case tID:{
+      case tCOMA:{
         ;
         break;
         }
@@ -173,37 +171,23 @@ void Programa() throws ParseException {
         jj_la1[6] = jj_gen;
         break label_2;
       }
-      label_3:
-      while (true) {
-        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-        case tID:{
-          ;
-          break;
-          }
-        default:
-          jj_la1[7] = jj_gen;
-          break label_3;
-        }
-        jj_consume_token(tID);
-        jj_consume_token(tCOMA);
-      }
+      jj_consume_token(tCOMA);
       jj_consume_token(tID);
     }
 }
 
   static final public void declaracion_variables() throws ParseException {
-    label_4:
+    label_3:
     while (true) {
       declaracion_var();
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case tDOBLEPUNTO:
       case tID:{
         ;
         break;
         }
       default:
-        jj_la1[8] = jj_gen;
-        break label_4;
+        jj_la1[7] = jj_gen;
+        break label_3;
       }
     }
 }
@@ -227,7 +211,7 @@ void Programa() throws ParseException {
       break;
       }
     default:
-      jj_la1[9] = jj_gen;
+      jj_la1[8] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -257,7 +241,7 @@ void Programa() throws ParseException {
       break;
       }
     default:
-      jj_la1[10] = jj_gen;
+      jj_la1[9] = jj_gen;
       ;
     }
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
@@ -273,24 +257,23 @@ void Programa() throws ParseException {
       break;
       }
     default:
-      jj_la1[11] = jj_gen;
+      jj_la1[10] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
 }
 
   static final public void lista_parametros_funcion() throws ParseException {
-    label_5:
+    label_4:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case tDOBLEPUNTO:
       case tID:{
         ;
         break;
         }
       default:
-        jj_la1[12] = jj_gen;
-        break label_5;
+        jj_la1[11] = jj_gen;
+        break label_4;
       }
       declaracion_var();
       jj_consume_token(tPUNTOCOMA);
@@ -313,7 +296,7 @@ void Programa() throws ParseException {
       break;
       }
     default:
-      jj_la1[13] = jj_gen;
+      jj_la1[12] = jj_gen;
       ;
     }
     jj_consume_token(tIS);
@@ -328,7 +311,7 @@ void Programa() throws ParseException {
       break;
       }
     default:
-      jj_la1[14] = jj_gen;
+      jj_la1[13] = jj_gen;
       ;
     }
     jj_consume_token(tRETURN);
@@ -357,19 +340,18 @@ void Programa() throws ParseException {
   static final public void inst_escribir() throws ParseException {
     jj_consume_token(tPUT);
     jj_consume_token(tPARENTESIS_OPEN);
-    label_6:
+    label_5:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case tCONST_CHAR:
       case tCONST_STRING:
-      case tCOMA:
       case tID:{
         ;
         break;
         }
       default:
-        jj_la1[15] = jj_gen;
-        break label_6;
+        jj_la1[14] = jj_gen;
+        break label_5;
       }
       if (jj_2_1(2147483647)) {
         llamada_funcion();
@@ -383,9 +365,14 @@ void Programa() throws ParseException {
           jj_consume_token(tCONST_CHAR);
           break;
           }
-        default:
-          jj_la1[16] = jj_gen;
+        case tID:{
           lista_ids();
+          break;
+          }
+        default:
+          jj_la1[15] = jj_gen;
+          jj_consume_token(-1);
+          throw new ParseException();
         }
       }
       jj_consume_token(tCOMA);
@@ -402,9 +389,14 @@ void Programa() throws ParseException {
         jj_consume_token(tCONST_CHAR);
         break;
         }
-      default:
-        jj_la1[17] = jj_gen;
+      case tID:{
         lista_ids();
+        break;
+        }
+      default:
+        jj_la1[16] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
       }
     }
     jj_consume_token(tPARENTESIS_CLOSE);
@@ -413,19 +405,18 @@ void Programa() throws ParseException {
   static final public void inst_escribir_linea() throws ParseException {
     jj_consume_token(tPUT_LN);
     jj_consume_token(tPARENTESIS_OPEN);
-    label_7:
+    label_6:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case tCONST_CHAR:
       case tCONST_STRING:
-      case tCOMA:
       case tID:{
         ;
         break;
         }
       default:
-        jj_la1[18] = jj_gen;
-        break label_7;
+        jj_la1[17] = jj_gen;
+        break label_6;
       }
       if (jj_2_3(2147483647)) {
         llamada_funcion();
@@ -439,9 +430,14 @@ void Programa() throws ParseException {
           jj_consume_token(tCONST_CHAR);
           break;
           }
-        default:
-          jj_la1[19] = jj_gen;
+        case tID:{
           lista_ids();
+          break;
+          }
+        default:
+          jj_la1[18] = jj_gen;
+          jj_consume_token(-1);
+          throw new ParseException();
         }
       }
       jj_consume_token(tCOMA);
@@ -458,9 +454,14 @@ void Programa() throws ParseException {
         jj_consume_token(tCONST_CHAR);
         break;
         }
-      default:
-        jj_la1[20] = jj_gen;
+      case tID:{
         lista_ids();
+        break;
+        }
+      default:
+        jj_la1[19] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
       }
     }
     jj_consume_token(tPARENTESIS_CLOSE);
@@ -488,14 +489,14 @@ void Programa() throws ParseException {
           break;
           }
         default:
-          jj_la1[21] = jj_gen;
+          jj_la1[20] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
         break;
         }
       default:
-        jj_la1[22] = jj_gen;
+        jj_la1[21] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -504,7 +505,7 @@ void Programa() throws ParseException {
 
   static final public void inst_if() throws ParseException {
     jj_consume_token(tIF);
-    label_8:
+    label_7:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case tCONST_INT:
@@ -523,8 +524,8 @@ void Programa() throws ParseException {
         break;
         }
       default:
-        jj_la1[23] = jj_gen;
-        break label_8;
+        jj_la1[22] = jj_gen;
+        break label_7;
       }
       expresion();
       jj_consume_token(tTHEN);
@@ -541,7 +542,7 @@ void Programa() throws ParseException {
       break;
       }
     default:
-      jj_la1[24] = jj_gen;
+      jj_la1[23] = jj_gen;
       ;
     }
     jj_consume_token(tEND);
@@ -577,7 +578,7 @@ void Programa() throws ParseException {
       break;
       }
     default:
-      jj_la1[25] = jj_gen;
+      jj_la1[24] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -626,14 +627,14 @@ void Programa() throws ParseException {
       break;
       }
     default:
-      jj_la1[26] = jj_gen;
+      jj_la1[25] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
 }
 
   static final public void instrucciones() throws ParseException {
-    label_9:
+    label_8:
     while (true) {
       instruccion();
       jj_consume_token(tPUNTOCOMA);
@@ -651,8 +652,8 @@ void Programa() throws ParseException {
         break;
         }
       default:
-        jj_la1[27] = jj_gen;
-        break label_9;
+        jj_la1[26] = jj_gen;
+        break label_8;
       }
     }
 }
@@ -662,7 +663,7 @@ void Programa() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case tAND:
     case tOR:{
-      label_10:
+      label_9:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
         case tAND:{
@@ -674,7 +675,7 @@ void Programa() throws ParseException {
           break;
           }
         default:
-          jj_la1[28] = jj_gen;
+          jj_la1[27] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -686,20 +687,20 @@ void Programa() throws ParseException {
           break;
           }
         default:
-          jj_la1[29] = jj_gen;
-          break label_10;
+          jj_la1[28] = jj_gen;
+          break label_9;
         }
       }
       break;
       }
     default:
-      jj_la1[30] = jj_gen;
+      jj_la1[29] = jj_gen;
       ;
     }
 }
 
   static final public void lista_una_o_mas_exps() throws ParseException {
-    label_11:
+    label_10:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case tCONST_INT:
@@ -718,8 +719,8 @@ void Programa() throws ParseException {
         break;
         }
       default:
-        jj_la1[31] = jj_gen;
-        break label_11;
+        jj_la1[30] = jj_gen;
+        break label_10;
       }
       expresion();
       jj_consume_token(tCOMA);
@@ -741,7 +742,7 @@ void Programa() throws ParseException {
       break;
       }
     default:
-      jj_la1[32] = jj_gen;
+      jj_la1[31] = jj_gen;
       ;
     }
 }
@@ -773,7 +774,7 @@ void Programa() throws ParseException {
       break;
       }
     default:
-      jj_la1[33] = jj_gen;
+      jj_la1[32] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -793,18 +794,18 @@ void Programa() throws ParseException {
         break;
         }
       default:
-        jj_la1[34] = jj_gen;
+        jj_la1[33] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       break;
       }
     default:
-      jj_la1[35] = jj_gen;
+      jj_la1[34] = jj_gen;
       ;
     }
     termino();
-    label_12:
+    label_11:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case tSUM:
@@ -813,8 +814,8 @@ void Programa() throws ParseException {
         break;
         }
       default:
-        jj_la1[36] = jj_gen;
-        break label_12;
+        jj_la1[35] = jj_gen;
+        break label_11;
       }
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case tSUM:{
@@ -826,7 +827,7 @@ void Programa() throws ParseException {
         break;
         }
       default:
-        jj_la1[37] = jj_gen;
+        jj_la1[36] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -836,7 +837,7 @@ void Programa() throws ParseException {
 
   static final public void termino() throws ParseException {
     factor();
-    label_13:
+    label_12:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case tMUL:
@@ -846,8 +847,8 @@ void Programa() throws ParseException {
         break;
         }
       default:
-        jj_la1[38] = jj_gen;
-        break label_13;
+        jj_la1[37] = jj_gen;
+        break label_12;
       }
       operador_multiplicativo();
       factor();
@@ -869,7 +870,7 @@ void Programa() throws ParseException {
       break;
       }
     default:
-      jj_la1[39] = jj_gen;
+      jj_la1[38] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -895,7 +896,7 @@ void Programa() throws ParseException {
       break;
       }
     default:
-      jj_la1[40] = jj_gen;
+      jj_la1[39] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -924,7 +925,7 @@ void Programa() throws ParseException {
       break;
       }
     default:
-      jj_la1[41] = jj_gen;
+      jj_la1[40] = jj_gen;
       if (jj_2_6(2)) {
         jj_consume_token(tID);
         jj_consume_token(tPARENTESIS_OPEN);
@@ -957,7 +958,7 @@ void Programa() throws ParseException {
           break;
           }
         default:
-          jj_la1[42] = jj_gen;
+          jj_la1[41] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -1013,27 +1014,13 @@ void Programa() throws ParseException {
     finally { jj_save(5, xla); }
   }
 
-  static private boolean jj_3_6()
- {
-    if (jj_scan_token(tID)) return true;
-    if (jj_scan_token(tPARENTESIS_OPEN)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_llamada_funcion_352_9_14()
- {
-    if (jj_scan_token(tID)) return true;
-    if (jj_scan_token(tPARENTESIS_OPEN)) return true;
-    return false;
-  }
-
   static private boolean jj_3_5()
  {
-    if (jj_3R_llamada_funcion_352_9_14()) return true;
+    if (jj_3R_llamada_funcion_352_9_13()) return true;
     return false;
   }
 
-  static private boolean jj_3_2()
+  static private boolean jj_3R_llamada_funcion_352_9_13()
  {
     if (jj_scan_token(tID)) return true;
     if (jj_scan_token(tPARENTESIS_OPEN)) return true;
@@ -1047,7 +1034,7 @@ void Programa() throws ParseException {
     return false;
   }
 
-  static private boolean jj_3_1()
+  static private boolean jj_3_2()
  {
     if (jj_scan_token(tID)) return true;
     if (jj_scan_token(tPARENTESIS_OPEN)) return true;
@@ -1055,6 +1042,20 @@ void Programa() throws ParseException {
   }
 
   static private boolean jj_3_3()
+ {
+    if (jj_scan_token(tID)) return true;
+    if (jj_scan_token(tPARENTESIS_OPEN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_1()
+ {
+    if (jj_scan_token(tID)) return true;
+    if (jj_scan_token(tPARENTESIS_OPEN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_6()
  {
     if (jj_scan_token(tID)) return true;
     if (jj_scan_token(tPARENTESIS_OPEN)) return true;
@@ -1073,7 +1074,7 @@ void Programa() throws ParseException {
   static private Token jj_scanpos, jj_lastpos;
   static private int jj_la;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[43];
+  static final private int[] jj_la1 = new int[42];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static private int[] jj_la1_2;
@@ -1083,13 +1084,13 @@ void Programa() throws ParseException {
 	   jj_la1_init_2();
 	}
 	private static void jj_la1_init_0() {
-	   jj_la1_0 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0xf00,0x0,0x2f00,0x0,0x0,0x0,0x18000,0x18000,0x18000,0x18000,0x18000,0x18000,0x1c000,0x0,0x4019c000,0x0,0x1c000,0x1000,0x1000,0x80000000,0x80000000,0x80000000,0x4019c000,0x7e00000,0x7e00000,0x180000,0x180000,0x180000,0x180000,0x38000000,0x38000000,0x4001c000,0x0,0x1c000,};
+	   jj_la1_0 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x1e00,0x0,0x5e00,0x0,0x0,0x0,0x30000,0x30000,0x30000,0x30000,0x30000,0x30000,0x38000,0x0,0x401b8000,0x0,0x38000,0x2000,0x2000,0x80000000,0x80000000,0x80000000,0x401b8000,0x7e00000,0x7e00000,0x180000,0x180000,0x180000,0x180000,0x38000000,0x38000000,0x40038000,0x0,0x38000,};
 	}
 	private static void jj_la1_init_1() {
-	   jj_la1_1 = new int[] {0x4000000,0x600,0x600,0x600,0x4000000,0x4000000,0x0,0x0,0x4000000,0x0,0x1000,0x0,0x4000000,0x40000000,0x40000000,0x1000000,0x0,0x0,0x1000000,0x0,0x0,0x0,0x0,0x40600180,0x8,0x0,0x1f0022,0x1f0022,0x1,0x1,0x1,0x40600180,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x40600180,0x40600000,0x180,};
+	   jj_la1_1 = new int[] {0x0,0x600,0x600,0x600,0x0,0x0,0x1000000,0x0,0x0,0x1000,0x0,0x0,0x40000000,0x40000000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x40600180,0x8,0x0,0x1f0022,0x1f0022,0x1,0x1,0x1,0x40600180,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x40600180,0x40600000,0x180,};
 	}
 	private static void jj_la1_init_2() {
-	   jj_la1_2 = new int[] {0x1,0x0,0x0,0x0,0x1,0x1,0x1,0x1,0x1,0x0,0x0,0x0,0x1,0x0,0x0,0x1,0x0,0x0,0x1,0x0,0x0,0x0,0x1,0x1,0x0,0x1,0x1,0x1,0x0,0x0,0x0,0x1,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x1,0x0,0x1,};
+	   jj_la1_2 = new int[] {0x1,0x0,0x0,0x0,0x1,0x1,0x0,0x1,0x0,0x0,0x0,0x1,0x0,0x0,0x1,0x1,0x1,0x1,0x1,0x1,0x0,0x1,0x1,0x0,0x1,0x1,0x1,0x0,0x0,0x0,0x1,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x1,0x0,0x1,};
 	}
   static final private JJCalls[] jj_2_rtns = new JJCalls[6];
   static private boolean jj_rescan = false;
@@ -1113,7 +1114,7 @@ void Programa() throws ParseException {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 43; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 42; i++) jj_la1[i] = -1;
 	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1128,7 +1129,7 @@ void Programa() throws ParseException {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 43; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 42; i++) jj_la1[i] = -1;
 	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1146,7 +1147,7 @@ void Programa() throws ParseException {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 43; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 42; i++) jj_la1[i] = -1;
 	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1165,7 +1166,7 @@ void Programa() throws ParseException {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 43; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 42; i++) jj_la1[i] = -1;
 	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1182,7 +1183,7 @@ void Programa() throws ParseException {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 43; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 42; i++) jj_la1[i] = -1;
 	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1192,7 +1193,7 @@ void Programa() throws ParseException {
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 43; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 42; i++) jj_la1[i] = -1;
 	 for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1328,7 +1329,7 @@ void Programa() throws ParseException {
 	   la1tokens[jj_kind] = true;
 	   jj_kind = -1;
 	 }
-	 for (int i = 0; i < 43; i++) {
+	 for (int i = 0; i < 42; i++) {
 	   if (jj_la1[i] == jj_gen) {
 		 for (int j = 0; j < 32; j++) {
 		   if ((jj_la1_0[i] & (1<<j)) != 0) {

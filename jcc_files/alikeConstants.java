@@ -25,25 +25,25 @@ public interface alikeConstants {
   /** RegularExpression Id. */
   int tENTER = 7;
   /** RegularExpression Id. */
-  int tBOOL = 8;
+  int tCOMENTARIO = 8;
   /** RegularExpression Id. */
-  int tCHAR = 9;
+  int tBOOL = 9;
   /** RegularExpression Id. */
-  int tCHARACTER = 10;
+  int tCHAR = 10;
   /** RegularExpression Id. */
-  int tINTEGER = 11;
+  int tCHARACTER = 11;
   /** RegularExpression Id. */
-  int tNULL = 12;
+  int tINTEGER = 12;
   /** RegularExpression Id. */
-  int tARRAY = 13;
+  int tNULL = 13;
   /** RegularExpression Id. */
-  int tCONST_INT = 14;
+  int tARRAY = 14;
   /** RegularExpression Id. */
-  int tCONST_CHAR = 15;
+  int tCONST_INT = 15;
   /** RegularExpression Id. */
-  int tCONST_STRING = 16;
+  int tCONST_CHAR = 16;
   /** RegularExpression Id. */
-  int tCOMMENT = 17;
+  int tCONST_STRING = 17;
   /** RegularExpression Id. */
   int tASIGN = 18;
   /** RegularExpression Id. */
@@ -152,6 +152,7 @@ public interface alikeConstants {
     "\"\\n\"",
     "\"\\t\"",
     "\"\\r\"",
+    "<tCOMENTARIO>",
     "\"boolean\"",
     "\"char\"",
     "\"character\"",
@@ -161,7 +162,6 @@ public interface alikeConstants {
     "<tCONST_INT>",
     "<tCONST_CHAR>",
     "<tCONST_STRING>",
-    "\"--\"",
     "\":=\"",
     "\"+\"",
     "\"-\"",
