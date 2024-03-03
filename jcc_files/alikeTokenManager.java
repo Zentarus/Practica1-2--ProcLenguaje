@@ -884,7 +884,6 @@ public static Token getNextToken()
       jjmatchedKind = 0;
       jjmatchedPos = -1;
       matchedToken = jjFillToken();
-      CommonTokenAction(matchedToken);
       return matchedToken;
    }
 
@@ -903,7 +902,6 @@ public static Token getNextToken()
       if ((jjtoToken[jjmatchedKind >> 6] & (1L << (jjmatchedKind & 077))) != 0L)
       {
          matchedToken = jjFillToken();
-         CommonTokenAction(matchedToken);
          return matchedToken;
       }
       else

@@ -199,7 +199,7 @@ void Programa() :
 	<tPROCEDURE>
 	<tID>
 	<tIS>
-	( declaracion_variables() )?
+	( declaracion_variables_puntocoma() )?
 	( declaracion_procs_funcs() )?
 	<tBEGIN>
 	instrucciones()
@@ -230,7 +230,7 @@ void declaracion_func():
 }
 {
 	cabecera_funcion()
-	( declaracion_variables() )?
+	( declaracion_variables_puntocoma() )?
 	<tBEGIN>
 	instrucciones() // instrucciones() ENGLOBA EL RETURN, PARA ESTA SI SIRVE
 	<tEND>
@@ -243,7 +243,7 @@ void declaracion_proc():
 }
 {
 	cabecera_procedimiento() 
-	( declaracion_variables() )?
+	( declaracion_variables_puntocoma() )?
 	<tBEGIN>
 	instrucciones() // INSTRUCCIONES ENGLOBA EL 'RETURN', QUIZAS HAY QUE DIFERENCIAR instrucciones() CON Y SIN RETURN 
 					// PARA declaracion_proc(), USAR 'RETURN' ESTARÍA DE MOMENTO MAL, SOLO SIRVE PARA declaracion_func()
@@ -267,6 +267,13 @@ void declaracion_variables() :
 	( declaracion_var() )+
 }
 
+void declaracion_variables_puntocoma() :
+{
+
+}
+{
+	( declaracion_var_puntocoma() )+
+}
 		
 void tipo_variable() :
 {
@@ -293,6 +300,18 @@ void estructura_array():
 	<tARRAY> <tPARENTESIS_OPEN> rango() <tPARENTESIS_CLOSE> <tOF> tipo_variable()
 }
 
+void declaracion_var_puntocoma():
+{
+	
+}
+{
+	lista_ids() 
+	<tDOBLEPUNTO>
+	(<tREF>)?
+	( tipo_variable() | estructura_array())
+	(<tPUNTOCOMA>)?
+}
+
 void declaracion_var():
 {
 	
@@ -304,23 +323,12 @@ void declaracion_var():
 	( tipo_variable() | estructura_array())
 }
 
-void lista_parametros_funcion():
+void lista_parametros_funcion_o_proc():
 {
 
 }
 {
-	(declaracion_var() <tPUNTOCOMA>)* declaracion_var()
-	
-}
-	
-void parametros_formales():
-{
-
-}
-{
-	<tPARENTESIS_OPEN>
-	lista_parametros_funcion()
-	<tPARENTESIS_CLOSE>
+	declaracion_var() (<tPUNTOCOMA> declaracion_var())*	
 }
 
 void cabecera_procedimiento() :
@@ -330,7 +338,9 @@ void cabecera_procedimiento() :
 {
 	<tPROCEDURE>
 	<tID>
-	( parametros_formales() )?
+	<tPARENTESIS_OPEN>
+	( lista_parametros_funcion_o_proc() )?
+	<tPARENTESIS_CLOSE>
 	<tIS>
 }
 
@@ -339,8 +349,11 @@ void cabecera_funcion() :
 	
 }
 {
-	<tFUNCTION> <tID> 
-	( parametros_formales() )?
+	<tFUNCTION> 
+	<tID>
+	<tPARENTESIS_OPEN>
+	( lista_parametros_funcion_o_proc() )?
+	<tPARENTESIS_CLOSE>
 	<tRETURN> tipo_variable() <tIS>
 }
 	
