@@ -356,13 +356,14 @@ void cabecera_funcion() :
 	<tPARENTESIS_CLOSE>
 	<tRETURN> tipo_variable() <tIS>
 }
-	
+
 void llamada_funcion():
 {
 
 }
 {
-	<tID> <tPARENTESIS_OPEN> lista_ids() <tPARENTESIS_CLOSE>
+	LOOKAHEAD(2)
+	<tID> <tPARENTESIS_OPEN> (lista_ids() | lista_una_o_mas_exps())* <tPARENTESIS_CLOSE>
 }
 
 void inst_leer():
@@ -402,14 +403,14 @@ void inst_escribir_linea(): //HE PUESTO QUE PUEDAS ESCRIBIR EL RESULTADO DE CUAL
 	<tPARENTESIS_CLOSE>
 }
 
-void inst_invocacion_o_asignacion(): //NO SE MUY BIEN QUE SIGNIFICA ESTO PERO HE PUESTO O UNA INVOCACION DE UNA FUNCION O UNA ASIGNACION
+void inst_invocacion_o_asignacion(): 
 {
 
 }
 {
 	LOOKAHEAD(2)
-	llamada_funcion()
-|	<tID> <tASIGN> (<tCONST_CHAR> | <tCONST_INT> | <tCONST_STRING>)
+	llamada_funcion() |	
+	<tID> <tASIGN> (<tCONST_CHAR> | <tCONST_INT> | <tCONST_STRING> | expresion())
 
 }
 
@@ -418,12 +419,10 @@ void inst_if():
 
 }
 {
-	<tIF> (expresion() <tTHEN>
-	instrucciones()
-	<tELIF> )* expresion() <tTHEN>
-	instrucciones()
+	<tIF> expresion() <tTHEN> instrucciones()
+	(<tELIF>  expresion() <tTHEN> instrucciones())*
 	(<tELSE> instrucciones())?
-	<tEND> <tIF>
+	LOOKAHEAD(<tEND> <tIF>)
 	
 }
 
