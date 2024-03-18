@@ -10,7 +10,7 @@ options {
 	COMMON_TOKEN_ACTION = false;
 }
 
-// ----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 
 PARSER_BEGIN(alike)
@@ -199,7 +199,7 @@ void Programa() :
 	<tPROCEDURE>
 	<tID>
 	<tIS>
-	( declaracion_variables_puntocoma() )?
+	( declaracion_variables() )?
 	( declaracion_procs_funcs() )?
 	<tBEGIN>
 	instrucciones()
@@ -230,7 +230,7 @@ void declaracion_func():
 }
 {
 	cabecera_funcion()
-	( declaracion_variables_puntocoma() )?
+	( declaracion_variables() )?
 	<tBEGIN>
 	instrucciones() // instrucciones() ENGLOBA EL RETURN, PARA ESTA SI SIRVE
 	<tEND>
@@ -243,7 +243,7 @@ void declaracion_proc():
 }
 {
 	cabecera_procedimiento() 
-	( declaracion_variables_puntocoma() )?
+	( declaracion_variables() )?
 	<tBEGIN>
 	instrucciones() // INSTRUCCIONES ENGLOBA EL 'RETURN', QUIZAS HAY QUE DIFERENCIAR instrucciones() CON Y SIN RETURN 
 					// PARA declaracion_proc(), USAR 'RETURN' ESTARÍA DE MOMENTO MAL, SOLO SIRVE PARA declaracion_func()
@@ -309,7 +309,6 @@ void declaracion_var_puntocoma():
 	<tDOBLEPUNTO>
 	(<tREF>)?
 	( tipo_variable() | estructura_array())
-	(<tPUNTOCOMA>)?
 }
 
 void declaracion_var():
@@ -319,8 +318,8 @@ void declaracion_var():
 {
 	lista_ids() 
 	<tDOBLEPUNTO>
-	(<tREF>)?
 	( tipo_variable() | estructura_array())
+	<tPUNTOCOMA>
 }
 
 void lista_parametros_funcion_o_proc():
@@ -328,7 +327,7 @@ void lista_parametros_funcion_o_proc():
 
 }
 {
-	declaracion_var() (<tPUNTOCOMA> declaracion_var())*	
+	declaracion_var_puntocoma() (<tPUNTOCOMA> declaracion_var_puntocoma())*	
 }
 
 void cabecera_procedimiento() :
@@ -338,9 +337,9 @@ void cabecera_procedimiento() :
 {
 	<tPROCEDURE>
 	<tID>
-	<tPARENTESIS_OPEN>
+	(<tPARENTESIS_OPEN>
 	( lista_parametros_funcion_o_proc() )?
-	<tPARENTESIS_CLOSE>
+	<tPARENTESIS_CLOSE>) ?
 	<tIS>
 }
 
@@ -351,19 +350,10 @@ void cabecera_funcion() :
 {
 	<tFUNCTION> 
 	<tID>
-	<tPARENTESIS_OPEN>
+	(<tPARENTESIS_OPEN>
 	( lista_parametros_funcion_o_proc() )?
-	<tPARENTESIS_CLOSE>
+	<tPARENTESIS_CLOSE>) ?
 	<tRETURN> tipo_variable() <tIS>
-}
-
-void llamada_funcion():
-{
-
-}
-{
-	LOOKAHEAD(2)
-	<tID> <tPARENTESIS_OPEN> (lista_ids() | lista_una_o_mas_exps())* <tPARENTESIS_CLOSE>
 }
 
 void inst_leer():
@@ -388,7 +378,7 @@ void inst_escribir(): //HE PUESTO QUE PUEDAS ESCRIBIR EL RESULTADO DE CUALQUIER 
 }
 {
 	<tPUT> <tPARENTESIS_OPEN>
-	((LOOKAHEAD(<tID> <tPARENTESIS_OPEN>) llamada_funcion() | <tCONST_STRING> | <tCONST_CHAR> | lista_ids()) <tCOMA>)* (LOOKAHEAD(<tID> <tPARENTESIS_OPEN>) llamada_funcion() | <tCONST_STRING> | <tCONST_CHAR> | lista_ids())
+	lista_una_o_mas_exps()	
 	<tPARENTESIS_CLOSE>
 }
 
@@ -397,10 +387,10 @@ void inst_escribir_linea(): //HE PUESTO QUE PUEDAS ESCRIBIR EL RESULTADO DE CUAL
 
 }
 {
-	<tPUT_LN> <tPARENTESIS_OPEN> 
-	//LOOKAHEAD( ( "abstract" | "final" | "public" )*)
-	((LOOKAHEAD(<tID> <tPARENTESIS_OPEN>) llamada_funcion() | <tCONST_STRING> | <tCONST_CHAR> | lista_ids()) <tCOMA>)* (LOOKAHEAD(<tID> <tPARENTESIS_OPEN>) llamada_funcion() | <tCONST_STRING> | <tCONST_CHAR> | lista_ids())
-	<tPARENTESIS_CLOSE>
+	<tPUT_LN> 
+	(<tPARENTESIS_OPEN> 
+	lista_una_o_mas_exps()
+	<tPARENTESIS_CLOSE>) ?
 }
 
 void inst_invocacion_o_asignacion(): 
@@ -408,9 +398,9 @@ void inst_invocacion_o_asignacion():
 
 }
 {
-	LOOKAHEAD(2)
-	llamada_funcion() |	
-	<tID> <tASIGN> (<tCONST_CHAR> | <tCONST_INT> | <tCONST_STRING> | expresion())
+
+	expresion() <tASIGN> expresion() |
+	LOOKAHEAD(2) <tID> <tPARENTESIS_OPEN> lista_una_o_mas_exps() <tPARENTESIS_CLOSE> //Cambiar el lookahead para que funcione bien	
 
 }
 
@@ -422,7 +412,7 @@ void inst_if():
 	<tIF> expresion() <tTHEN> instrucciones()
 	(<tELIF>  expresion() <tTHEN> instrucciones())*
 	(<tELSE> instrucciones())?
-	LOOKAHEAD(<tEND> <tIF>)
+	<tEND> <tIF>
 	
 }
 
@@ -441,7 +431,7 @@ void inst_return():
 
 }
 {
-	<tRETURN> (<tID> | <tCONST_CHAR> | <tCONST_INT> | <tCONST_STRING>)
+	<tRETURN> expresion()
 }
 
 void inst_null():
@@ -490,7 +480,7 @@ void lista_una_o_mas_exps():
 
 }
 {
-	(expresion() <tCOMA>)* expresion()
+	expresion() (<tCOMA> expresion())* 
 	
 }
 
