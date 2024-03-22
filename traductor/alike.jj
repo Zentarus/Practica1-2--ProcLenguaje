@@ -232,7 +232,7 @@ void declaracion_func():
 	cabecera_funcion()
 	( declaracion_variables() )?
 	<tBEGIN>
-	instrucciones() // instrucciones() ENGLOBA EL RETURN, PARA ESTA SI SIRVE
+	instrucciones()
 	<tEND>
 	<tPUNTOCOMA>
 }
@@ -245,8 +245,7 @@ void declaracion_proc():
 	cabecera_procedimiento() 
 	( declaracion_variables() )?
 	<tBEGIN>
-	instrucciones() // INSTRUCCIONES ENGLOBA EL 'RETURN', QUIZAS HAY QUE DIFERENCIAR instrucciones() CON Y SIN RETURN 
-					// PARA declaracion_proc(), USAR 'RETURN' ESTARÍA DE MOMENTO MAL, SOLO SIRVE PARA declaracion_func()
+	instrucciones()
 	<tEND>
 	<tPUNTOCOMA>
 }
@@ -256,7 +255,7 @@ void lista_ids():
 
 }
 {
-	<tID> (<tCOMA> <tID>)*  //Aceptamos que una lista de ids pueda estar formada por un solo id
+	<tID> (<tCOMA> <tID>)* 
 }
 
 void declaracion_variables() :
@@ -372,7 +371,7 @@ void inst_saltar_linea():
 	<tSKIP_LN>
 }
 
-void inst_escribir(): //HE PUESTO QUE PUEDAS ESCRIBIR EL RESULTADO DE CUALQUIER FUNCION PERO IGUAL ES SOLO EL DE INT2CHAR(K)
+void inst_escribir():
 {
 
 }
@@ -382,7 +381,7 @@ void inst_escribir(): //HE PUESTO QUE PUEDAS ESCRIBIR EL RESULTADO DE CUALQUIER 
 	<tPARENTESIS_CLOSE>
 }
 
-void inst_escribir_linea(): //HE PUESTO QUE PUEDAS ESCRIBIR EL RESULTADO DE CUALQUIER FUNCION PERO IGUAL ES SOLO EL DE INT2CHAR(K)
+void inst_escribir_linea():
 {
 
 }
@@ -399,8 +398,7 @@ void inst_invocacion_o_asignacion():
 }
 {
 
-	expresion() <tASIGN> expresion() |
-	LOOKAHEAD(2) <tID> <tPARENTESIS_OPEN> lista_una_o_mas_exps() <tPARENTESIS_CLOSE> //Cambiar el lookahead para que funcione bien	
+	expresion() (<tASIGN> expresion())?
 
 }
 
